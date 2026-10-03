@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>موقعنا ستور - تسجيل الدخول</title>
+  <title>موقعنا ستور | تسجيل الدخول</title>
 
   <style>
     * {
@@ -23,19 +22,20 @@
     }
 
     .card {
-      width: min(92%, 420px);
+      width: 90%;
+      max-width: 400px;
       padding: 30px;
-      border-radius: 22px;
-      background: #1e293b;
       text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      background: #1e293b;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.4);
     }
 
     h1 {
       margin-bottom: 8px;
     }
 
-    p {
+    .subtitle {
       color: #cbd5e1;
       margin-bottom: 25px;
     }
@@ -50,58 +50,21 @@
       cursor: pointer;
     }
 
-    #googleLogin {
+    #loginBtn {
       background: white;
       color: #111827;
     }
 
-    #logout {
+    #logoutBtn {
       display: none;
       margin-top: 12px;
       background: #ef4444;
       color: white;
     }
 
-    #userBox {
+    #user {
       display: none;
       margin-top: 20px;
-      padding: 15px;
-      background: #0f172a;
-      border-radius: 14px;
-    }
-
-    #userPhoto {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      display: none;
-      margin: 0 auto 12px;
-    }
-
-    #status {
-      margin-top: 15px;
-      color: #93c5fd;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="card">
-
-    <h1>موقعنا ستور</h1>
-    <p>سجل الدخول بحساب Google</p>
-
-    <button id="googleLogin">
-      🔐 تسجيل الدخول باستخدام Google
-    </button>
-
-    <div id="userBox">
-      <img id="userPhoto">
-
-      <h3 id="userName"></h3>
-      <p id="userEmail"></p>
-    </div>
-
-    <button id="logout">
-      تسجيل الخ
+      padding: 20px;
+      border-radius: 15px;
+      background: #0
