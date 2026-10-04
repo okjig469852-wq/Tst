@@ -1,134 +1,205 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فاحص ثغرات وحماية المواقع (WAF Scanner)</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Cairo', sans-serif; }</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>موقعنا ستور | تسجيل الدخول</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Tahoma, sans-serif;
+      background:
+        radial-gradient(circle at top, #1e3a8a, transparent 40%),
+        #07111f;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      padding: 32px 25px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 24px;
+      background: rgba(15,23,42,.92);
+      box-shadow: 0 25px 80px rgba(0,0,0,.45);
+      text-align: center;
+    }
+
+    .logo {
+      width: 75px;
+      height: 75px;
+      margin: 0 auto 18px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 35px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      box-shadow: 0 12px 30px rgba(37,99,235,.35);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      margin: 10px 0 28px;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    button:active {
+      transform: scale(.98);
+    }
+
+    #loginBtn {
+      background: white;
+      color: #111827;
+    }
+
+    #loginBtn:hover {
+      background: #e5e7eb;
+    }
+
+    #logoutBtn {
+      display: none;
+      margin-top: 12px;
+      background: #dc2626;
+      color: white;
+    }
+
+    #userBox {
+      display: none;
+      margin-top: 22px;
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(2,6,23,.7);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    #photo {
+      display: none;
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 12px;
+      border: 3px solid #3b82f6;
+    }
+
+    #name {
+      margin: 8px 0;
+    }
+
+    #email {
+      margin: 0;
+      color: #94a3b8;
+      word-break: break-word;
+      font-size: 14px;
+    }
+
+    #status {
+      min-height: 22px;
+      margin-top: 18px;
+      color: #93c5fd;
+      font-size: 14px;
+    }
+
+    .loading {
+      opacity: .6;
+      pointer-events: none;
+    }
+
+    .success {
+      color: #4ade80 !important;
+    }
+
+    .error {
+      color: #f87171 !important;
+    }
+  </style>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col p-6">
 
-    <!-- رأس الصفحة -->
-    <header class="max-w-4xl mx-auto w-full mb-6">
-        <h1 class="text-2xl font-bold text-blue-500">🔍 فاحص حماية المواقع والأمان</h1>
-        <p class="text-gray-400 text-sm mt-1">أدخل رابط موقعك أو خادمك المحلي لاختبار كفاءة الـ WAF ورصد الثغرات آلياً.</p>
-    </header>
+<body>
 
-    <!-- محتوى الأداة -->
-    <main class="max-w-4xl mx-auto w-full space-y-6">
+  <main class="card">
 
-        <!-- حقل إدخال الرابط -->
-        <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow-lg">
-            <label class="block text-sm font-semibold mb-2 text-gray-300">رابط الموقع المراد فحصه (Target URL):</label>
-            <div class="flex gap-3">
-                <input type="text" id="targetUrl" value="http://localhost:3000" placeholder="مثال: http://localhost:3000" 
-                    class="flex-1 bg-gray-950 border border-gray-800 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 text-sm font-mono">
-                <button onclick="startScanning()" id="scanBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition duration-200 text-sm">
-                    بدء فحص الحماية
-                </button>
-            </div>
-        </div>
+    <div class="logo">🛍️</div>
 
-        <!-- سجل نتائج الفحص (Live Output) -->
-        <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow-lg">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="font-bold text-sm text-gray-300">تقرير الفحص المباشر (Scan Report):</h3>
-                <button onclick="clearLogs()" class="text-xs text-gray-500 hover:text-gray-300">مسح السجل</button>
-            </div>
-            <div id="scanLog" class="bg-gray-950 font-mono text-xs text-gray-300 p-4 rounded-lg h-72 overflow-y-auto border border-gray-800 space-y-2">
-                <div class="text-gray-500">[جاهز] أدخل الرابط واضغط على "بدء فحص الحماية" للبدء...</div>
-            </div>
-        </div>
+    <h1>موقعنا ستور</h1>
 
-    </main>
+    <p class="subtitle">
+      سجّل دخولك للوصول إلى حسابك
+    </p>
 
-    <!-- الفوتر -->
-    <footer class="max-w-4xl mx-auto w-full text-center text-xs text-gray-600 mt-auto pt-6">
-        منصة الحماية الأمنية © 2026 - مخصص للاختبار على المواقع المملوكة فقط.
-    </footer>
+    <button id="loginBtn">
+      🔐 تسجيل الدخول باستخدام Google
+    </button>
 
-    <!-- كود الجافاسكريبت الخاص بعملية الفحص -->
-    <script>
-        const scanLog = document.getElementById('scanLog');
-        const scanBtn = document.getElementById('scanBtn');
+    <section id="userBox">
 
-        function appendLog(message, type = 'info') {
-            const time = new Date().toLocaleTimeString();
-            let colorClass = 'text-gray-300';
-            
-            if (type === 'success') colorClass = 'text-green-400';
-            if (type === 'warning') colorClass = 'text-amber-400';
-            if (type === 'danger') colorClass = 'text-red-400';
+      <img id="photo" alt="صورة المستخدم">
 
-            scanLog.innerHTML += `<div class="${colorClass}">[${time}] ${message}</div>`;
-            scanLog.scrollTop = scanLog.scrollHeight;
-        }
+      <h3 id="name"></h3>
 
-        function clearLogs() {
-            scanLog.innerHTML = '<div class="text-gray-500">[تم مسح السجل]</div>';
-        }
+      <p id="email"></p>
 
-        async function startScanning() {
-            let baseUrl = document.getElementById('targetUrl').value.trim();
-            if (!baseUrl) {
-                alert('الرجاء إدخال رابط صالح!');
-                return;
-            }
+    </section>
 
-            // إزالة الشرطة المائلة الأخيرة إن وجدت لتوحيد الرابط
-            if (baseUrl.endsWith('/')) {
-                baseUrl = baseUrl.slice(0, -1);
-            }
+    <button id="logoutBtn">
+      🚪 تسجيل الخروج
+    </button>
 
-            scanBtn.disabled = true;
-            scanBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            scanBtn.textContent = 'جاري الفحص...';
+    <div id="status"></div>
 
-            appendLog(`[بدء الفحص] الهدف: ${baseUrl}`, 'info');
+  </main>
 
-            // قائمة الاختبارات والمسارات التجريبية
-            const testPayloads = [
-                { name: 'فحص SQL Injection', path: '/?id=1%27%20OR%20%271%27=%271' },
-                { name: 'فحص XSS Attack', path: '/?search=%3Cscript%3Ealert(1)%3C/script%3E' },
-                { name: 'فحص ملفات حساسة مخفية (.env)', path: '/.env' },
-                { name: 'فحص مسار لوحة الإدارة (/admin)', path: '/admin' }
-            ];
 
-            for (const test of testPayloads) {
-                const fullUrl = baseUrl + test.path;
-                try {
-                    appendLog(`جاري اختبار: ${test.name} ...`, 'info');
-                    
-                    const response = await fetch(fullUrl, { method: 'GET' });
-                    
-                    // تحليل الاستجابة
-                    if (response.status === 403) {
-                        appendLog(`✔ [محمي] ${test.name} -> تصدى الـ WAF للطلب بنجاح (رمز الاستجابة: 403 Forbidden)`, 'success');
-                    } else if (response.status === 429) {
-                        appendLog(`✔ [محمي] ${test.name} -> تم تفعيل تقييد المعدل (رمز الاستجابة: 429)`, 'success');
-                    } else if (response.status === 404) {
-                        appendLog(`ℹ [آمن] ${test.name} -> المسار غير موجود (404 Not Found)`, 'info');
-                    } else if (response.status === 200) {
-                        appendLog(`⚠ [تنبيه أمني] ${test.name} -> عَبَرَ الطلب بنجاح (رمز الاستجابة: 200). تأكد من حمايته!`, 'danger');
-                    } else {
-                        appendLog(`ℹ ${test.name} -> استجابة غير معتادة (Code: ${response.status})`, 'warning');
-                    }
+  <!-- Firebase -->
+  <script type="module">
 
-                } catch (error) {
-                    appendLog(`❌ فشل الاتصال بالهدف أو السيرفر مغلق (${test.name}). تأكد من تشغيل السيرفر المحلي.`, 'danger');
-                }
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
 
-                // فاصل زمنية قصير بين كل فحص واختبار
-                await new Promise(resolve => setTimeout(resolve, 500));
-            }
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-            appendLog(`[اكتمل الفحص] تم الانتهاء من فحص كافة البارامترات والمسارات.`, 'success');
-            scanBtn.disabled = false;
-            scanBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            scanBtn.textContent = 'بدء فحص الحماية';
-        }
-    </script>
-</body>
-</html>
+    import {
+      getDatabase,
+      ref,
+      set
+    } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+
+
+    // =========================================
+    // Firebase Configuration
+    // =========================================
+
+    const
